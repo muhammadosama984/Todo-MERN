@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
-import apiRoute from "./routes/api.js";
+import AuthMiddleware from "./middlewares/AuthMiddleware.js";
+import apiRoute, { apiProtected } from "./routes/api.js";
 import { DB_CONNECT } from "./utils/constants.js";
 
 const app = express();
@@ -10,5 +11,6 @@ const PORT = 8000;
 
 app.use(express.json());
 app.use("/api/", apiRoute);
+app.use("/api/", AuthMiddleware, apiProtected);
 
 app.listen(PORT, () => console.log("server is running"));
