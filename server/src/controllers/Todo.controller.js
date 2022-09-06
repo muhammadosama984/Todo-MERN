@@ -30,6 +30,7 @@ export const createTodo = async (req, res) => {
           $push: { todos: result },
         }
       );
+
       return res.json(
         jsonGenerate(statusCode.SUCCESS, "Todo created succesfully", result)
       );

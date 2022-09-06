@@ -6,7 +6,7 @@ const todoSchema = mongoose.Schema({
     ref: "User",
     required: true,
   },
-  description: {
+  desc: {
     type: String,
     required: true,
   },
@@ -15,10 +15,7 @@ const todoSchema = mongoose.Schema({
     default: false,
     required: true,
   },
-  Todos: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Todo",
-  },
+
   Date: {
     type: Date,
     default: Date.now,
