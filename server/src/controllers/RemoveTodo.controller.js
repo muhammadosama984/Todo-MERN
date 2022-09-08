@@ -8,20 +8,21 @@ export const RemoveTod = async (req, res) => {
   const error = validationResult(req);
 
   if (!error.isEmpty()) {
-    return res.json(
+    res.json(
       jsonGenerate(
         statusCode.VALIDATION_ERROR,
-        "id is required",
+        "todo id is required",
         error.mapped()
       )
     );
   }
 
   try {
-    const result = await Todo.findOneAndUpdate({
+    const result = await Todo.findOneAndDelete({
       userId: req.userId,
       _id: req.body.todo_id,
     });
+
     if (result) {
       const user = await User.findOneAndUpdate(
         {

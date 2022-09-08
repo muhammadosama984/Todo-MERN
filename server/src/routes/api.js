@@ -25,13 +25,13 @@ apiProtected.post(
 
 apiProtected.post(
   "/marktodo",
-  [check("Todo id", "Todo id is required").exists()],
+  [check("todo_id", "Todo id is required").exists()],
   MarkTodo
 );
 
 apiProtected.post(
   "/deletetodo",
-  [check("Todo id", "Todo id is required").exists()],
+  [check("todo_id", "Todo id is required").exists()],
   RemoveTod
 );
 apiProtected.get("/todolist", GetTodos);
