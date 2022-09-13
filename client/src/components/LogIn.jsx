@@ -1,16 +1,27 @@
-import React, {useState} from 'react'
+import axios from 'axios';
+import React, {useState,useEffect} from 'react'
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/api.js';
+import {ToastContainer, toast} from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
-function LogIn() {
+function LogIn({user, setUser}) {
+  const navigation = useNavigate();
 
   const [form, setform] = useState({
     username: "",
     password: "",
   });
 
+  useEffect(() => {
+    if (user){
+      navigation("/");
+    }
+  }, [])
+  
+ 
   const [errors, seterrors] = useState(null);
-  const navigation = useNavigate();
+ 
   const handleChange=(e)=>{
     setform({...form, [e.target.name]: e.target.value})
   }
@@ -23,18 +34,22 @@ function LogIn() {
     
 
     if (result.status == 200){
-      if (result.data.status === 200){
-        localStorage.setItem('user', JSON.stringify(result.data.data));
+     
+      if (result.data.statusCode === 200){
+        console.log("success here");
+        localStorage.setItem("user", JSON.stringify(result.data.data));
+       
         navigation("/");
         return;
       }
-      if (result.data.status === 201){
+      if (result.data.statusCode === 201){
         seterrors(result.data.data);
         return;
       }
 
-      if (result.data.status === 202){
-        
+      if (result.data.statusCode === 202){
+       toast(result.data.message);
+       return;
       }
     }
 
@@ -44,6 +59,7 @@ function LogIn() {
 
   return (
   <div className='container'>
+    <ToastContainer/>
     <div className="row justify-content-center mt-4">
     <div className='col-lg-5 card border-primary mt-4'>
        
@@ -52,13 +68,20 @@ function LogIn() {
            <div class="form-group">
       <label for="exampleInputEmail1" class="form-label mt-4">Email or Username</label>
       <input type="text" onChange={handleChange} name = "username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email or username"/>
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+
+      {
+        errors?.username && <small id="emailHelp" class="form-text text-muted">{errors.username.msg}</small>
+      }
+      
     </div>
 
     <div class="form-group">
       <label for="exampleInputEmail1" class="form-label mt-4">Password</label>
       <input type="password" onChange={handleChange} name = "password" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter Password"/>
-      <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+      {
+        errors?.password && <small id="emailHelp" class="form-text text-muted">{errors.password.msg}</small>
+      }
+      
     </div>
 
     <button type="button" onClick={handleSubmit} class="btn btn-primary">Login</button>
